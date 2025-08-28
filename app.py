@@ -22,7 +22,6 @@ def login():
         conn = db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # fetch user by email and password
         cursor.execute("SELECT * FROM user_sign WHERE email=%s AND password=%s", (email, password))
         user = cursor.fetchone()
 
@@ -36,7 +35,7 @@ def login():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        # collecting the data
+        
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
@@ -66,3 +65,4 @@ def landing():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
