@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Validation and Spam Checker</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    /* Navbar */
+    .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .navbar-left span {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .navbar-left a {
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .navbar-left a:hover {
+      color: #bbb;
+    }
+
+    .signup-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-right: 65px; /* moves button a bit left */
+    }
+
+    .signup-btn:hover {
+      background: #ddd;
+    }
+
+    /* Center content */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* Logo styling (circular image) */
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden; /* ensures image fits inside circle */
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* keeps aspect ratio */
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: normal;
+      color: #666;
+      margin: 5px 0 20px;
+    }
+
+    input[type="email"] {
+      padding: 12px;
+      width: 250px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+      font-size: 14px;
+      background: #222;
+      color: white;
+      text-align: center;
+    }
+
+    
+    input[type="password"] {
+      padding: 12px;
+      width: 250px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+      font-size: 14px;
+      background: #222;
+      color: white;
+      text-align: center;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    button {
+      padding: 12px;
+      width: 250px;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #000;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+     .error-message {
+      color: red;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <span>MailGuard®</span>
+      <a href="#">Home</a>
+      <a href="#">Register</a>
+      <a href="#">Help</a>
+    </div>
+    <a href="{{ url_for('signup') }}" class="signup-btn">Sign Up</a>
+
+  </div>
+
+ 
+  <div class="container">
+    <div class="logo">
+      <img src="logo.jpg" alt="logo">
+    </div>
+    <h1>Email Validation and Spam Checker</h1>
+    <h2>Secure login</h2>
+
+     {# Error message block #}
+    {% if error %}
+      <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('login') }}">
+
+  <input type="email" name="email" placeholder="name@gmail.com" required><br>
+
+  <input type="password" name="password" placeholder="Enter Password" required><br>
+
+  <button type="submit">Login </button>
+</form>
+  </div>
+</body>
+</html>
