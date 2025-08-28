@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page - MailGuard</title>
-  
+  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -67,9 +67,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 100px;
-      height: 100vh;
-      background-color: #666;
+      gap: 50px;
+      height: 300px;
+      background-color: black;
     }
 
     .card {
@@ -93,13 +93,20 @@
 
     .card:hover {
       transform: scale(1.1);
-      color: #0f0; /* green highlight on hover */
+      color: #0f0; 
     }
 
     .card:hover i {
       color: #0f0;
     }
-  </style>
+
+    .h1_tag{
+      margin-top: 50px;
+      width: auto;
+      height: 80px;
+    
+
+    }  </style>
 </head>
 <body>
 
@@ -110,12 +117,16 @@
       <a href="#">Register</a>
       <a href="#">Help</a>
     </div>
-    <a href="{{ url_for('signup') }}" class="signup-btn">Sign Up</a>
+
 
   </div><br><br>
-
+  <div class="h1_tag">
+    
    <h1>Email Validation and Spam Checker</h1>
   <h2>Select the option you want to continue with</h2>
+
+  </div>
+
 
 
   <div class="container">
