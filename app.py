@@ -13,6 +13,9 @@ def db_connection():
     return conn
 
 @app.route("/", methods=["GET", "POST"])
+def home():
+    return "Hello from CGI!"
+    
 def login():
     error = None
     if request.method == "POST":
@@ -65,4 +68,5 @@ def landing():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
