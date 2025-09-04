@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Welcome to the Flask App!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
+=======
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 
@@ -71,3 +83,4 @@ if __name__ == "__main__":
 
 
 
+>>>>>>> origin/main
