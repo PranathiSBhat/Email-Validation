@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: Arial, Helvetica, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin-top: -100px;
+    }
+
+    input {
+      padding: 12px;
+      width: 250px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      text-align: center;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    button {
+      padding: 12px;
+      width: 250px;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ddd;
+    }
+   
+    .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .navbar-left span {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .navbar-left a {
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .navbar-left a:hover {
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <span>MailGuard®</span>
+      <a href="#">Home</a>
+      <a href="#">Register</a>
+      <a href="#">Help</a>
+    </div>
+
+  </div>
+
+  <div class="container">
+    <h1>Create Your Account</h1>
+    <form method="POST">
+      <input type="text" name="name" placeholder="Full Name" required><br>
+      <input type="email" name="email" placeholder="Email" required><br>
+      <input type="password" name="password" placeholder="Password" required><br>
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+</body>
+</html>
