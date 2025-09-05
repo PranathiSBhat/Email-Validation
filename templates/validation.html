@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Validation</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+     .navbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .navbar-left span {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .navbar-left a {
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .navbar-left a:hover {
+      color: #bbb;
+    }
+
+    h1 {
+      margin-top: 30px;
+    }
+
+    .form-box {
+      margin: 40px auto;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .form-box h2 {
+      margin-bottom: 10px;
+      font-weight: normal;
+      color: #ccc;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+
+    form input, form select, form textarea {
+      background: #222;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00cc66;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00994d;
+    }
+
+    .classification-box {
+      margin: 30px auto;
+      max-width: 500px;
+      padding: 20px;
+      border: 2px solid #00aaff;
+      border-radius: 8px;
+    }
+
+    .classification-box h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+    <div class="navbar">
+    <div class="navbar-left">
+      <span>MailGuard®</span>
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="#">Register</a>
+      <a href="#">Help</a>
+    </div>
+
+
+  </div><br><br>
+
+  <h1>Email Validation and Spam Checker</h1>
+
+  <div class="form-box">
+    <h2>Enter Your Email</h2>
+    <p style="color:#aaa;">Instant check.</p>
+
+    <form method="POST">
+      <select name="mode">
+        <option value="single">Single Email</option>
+        <option value="multiple">Multiple Emails</option>
+      </select>
+
+      <input type="text" name="emails" placeholder="Enter email(s)...">
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  
+
+  <div class="classification-box">
+    <h2>Classification:</h2>
+    {% if result %}
+      <ul>
+        {% for r in result %}
+          <li>{{ r }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if report %}
+      <p>Total Emails: {{ report.total }}</p>
+      <p>Valid: {{ report.valid }}</p>
+      <p>Invalid: {{ report.invalid }}</p>
+    {% endif %}
+  </div>
+
+  <a href="{{ url_for('landing') }}" style="color:#00ffcc;">⬅ Back to Home</a>
+
+</body>
+</html>
