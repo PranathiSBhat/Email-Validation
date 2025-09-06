@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Validation</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white font-sans text-center m-0 p-0">
+
+  <!-- Navbar -->
+  <div class="w-full flex justify-between items-center px-8 py-4 absolute top-0 left-0">
+    <div class="flex items-center gap-6 text-sm">
+      <span class="font-bold text-lg">MailGuard®</span>
+      <a href="{{ url_for('landing') }}" class="hover:text-gray-400">Home</a>
+      <a href="#" class="hover:text-gray-400">Register</a>
+      <a href="#" class="hover:text-gray-400">Help</a>
+    </div>
+  </div>
+
+  <br><br><br>
+
+  <!-- Title -->
+  <h1 class="mt-10 text-3xl font-bold">Email Validation and Spam Checker</h1>
+
+  <!-- Form Section -->
+  <div class="form-box mx-auto my-10 max-w-md p-6">
+    <h2 class="mb-2 font-normal text-gray-300">Enter Your Email</h2>
+    <p class="text-gray-400 mb-4">Instant check.</p>
+
+    <form method="POST" class="space-y-4">
+      <select name="mode" class="w-full p-3 rounded bg-gray-800 text-white border-none">
+        <option value="single">Single Email</option>
+        <option value="multiple">Multiple Emails</option>
+      </select>
+
+      <input type="text" name="emails" placeholder="Enter email(s)..." 
+             class="w-full p-3 rounded bg-gray-800 text-white border-none">
+
+      <button type="submit" 
+              class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded">
+        Submit
+      </button>
+    </form>
+  </div>
+
+  <!-- Results Section -->
+  <div class="classification-box mx-auto my-8 max-w-lg p-6 border-2 border-sky-500 rounded-lg">
+    <h2 class="text-xl font-semibold">Classification:</h2>
+
+    {% if result %}
+      <ul class="mt-4 list-none p-0">
+        {% for r in result %}
+          <li class="my-1">{{ r }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if report %}
+      <div class="mt-4 text-gray-300">
+        <p>Total Emails: {{ report.total }}</p>
+        <p>Valid: {{ report.valid }}</p>
+        <p>Invalid: {{ report.invalid }}</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Back Button -->
+  <a href="{{ url_for('landing') }}" 
+     class="text-teal-400 hover:text-teal-300 mt-6 inline-block">⬅ Back to Home</a>
+
+</body>
+</html>
