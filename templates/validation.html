@@ -3,167 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <title>Email Validation</title>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-     .navbar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .navbar-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 14px;
-    }
-
-    .navbar-left span {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .navbar-left a {
-      text-decoration: none;
-      color: white;
-      transition: 0.3s;
-    }
-
-    .navbar-left a:hover {
-      color: #bbb;
-    }
-
-    h1 {
-      margin-top: 30px;
-    }
-
-    .form-box {
-      margin: 40px auto;
-      max-width: 400px;
-      padding: 20px;
-    }
-
-    .form-box h2 {
-      margin-bottom: 10px;
-      font-weight: normal;
-      color: #ccc;
-    }
-
-    form input, form select, form textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      outline: none;
-    }
-
-    form input, form select, form textarea {
-      background: #222;
-      color: white;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #00cc66;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #00994d;
-    }
-
-    .classification-box {
-      margin: 30px auto;
-      max-width: 500px;
-      padding: 20px;
-      border: 2px solid #00aaff;
-      border-radius: 8px;
-    }
-
-    .classification-box h2 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      margin: 5px 0;
-    }
-  </style>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="navbar">
-    <div class="navbar-left">
-      <span>MailGuard®</span>
-      <a href="{{ url_for('landing') }}">Home</a>
-      <a href="#">Register</a>
-      <a href="#">Help</a>
+<body class="bg-black text-white font-sans text-center m-0 p-0">
+
+  <!-- Navbar -->
+  <div class="w-full flex justify-between items-center px-8 py-4 absolute top-0 left-0">
+    <div class="flex items-center gap-6 text-sm">
+      <span class="font-bold text-lg">MailGuard®</span>
+      <a href="{{ url_for('landing') }}" class="hover:text-gray-400">Home</a>
+      <a href="#" class="hover:text-gray-400">Register</a>
+      <a href="#" class="hover:text-gray-400">Help</a>
     </div>
+  </div>
 
+  <br><br><br>
 
-  </div><br><br>
+  <!-- Title -->
+  <h1 class="mt-10 text-3xl font-bold">Email Validation and Spam Checker</h1>
 
-  <h1>Email Validation and Spam Checker</h1>
+  <!-- Form Section -->
+  <div class="form-box mx-auto my-10 max-w-md p-6">
+    <h2 class="mb-2 font-normal text-gray-300">Enter Your Email</h2>
+    <p class="text-gray-400 mb-4">Instant check.</p>
 
-  <div class="form-box">
-    <h2>Enter Your Email</h2>
-    <p style="color:#aaa;">Instant check.</p>
-
-    <form method="POST">
-      <select name="mode">
+    <form method="POST" class="space-y-4">
+      <select name="mode" class="w-full p-3 rounded bg-gray-800 text-white border-none">
         <option value="single">Single Email</option>
         <option value="multiple">Multiple Emails</option>
       </select>
 
-      <input type="text" name="emails" placeholder="Enter email(s)...">
-      <button type="submit">Submit</button>
+      <input type="text" name="emails" placeholder="Enter email(s)..." 
+             class="w-full p-3 rounded bg-gray-800 text-white border-none">
+
+      <button type="submit" 
+              class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded">
+        Submit
+      </button>
     </form>
   </div>
-  
 
-  <div class="classification-box">
-    <h2>Classification:</h2>
+  <!-- Results Section -->
+  <div class="classification-box mx-auto my-8 max-w-lg p-6 border-2 border-sky-500 rounded-lg">
+    <h2 class="text-xl font-semibold">Classification:</h2>
+
     {% if result %}
-      <ul>
+      <ul class="mt-4 list-none p-0">
         {% for r in result %}
-          <li>{{ r }}</li>
+          <li class="my-1">{{ r }}</li>
         {% endfor %}
       </ul>
     {% endif %}
 
     {% if report %}
-      <p>Total Emails: {{ report.total }}</p>
-      <p>Valid: {{ report.valid }}</p>
-      <p>Invalid: {{ report.invalid }}</p>
+      <div class="mt-4 text-gray-300">
+        <p>Total Emails: {{ report.total }}</p>
+        <p>Valid: {{ report.valid }}</p>
+        <p>Invalid: {{ report.invalid }}</p>
+      </div>
     {% endif %}
   </div>
 
-  <a href="{{ url_for('landing') }}" style="color:#00ffcc;">⬅ Back to Home</a>
+  <!-- Back Button -->
+  <a href="{{ url_for('landing') }}" 
+     class="text-teal-400 hover:text-teal-300 mt-6 inline-block">⬅ Back to Home</a>
 
 </body>
 </html>
