@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Welcome to the Flask App!"
-
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 
@@ -25,9 +13,6 @@ def db_connection():
     return conn
 
 @app.route("/", methods=["GET", "POST"])
-def home():
-    return "Hello from CGI!"
-    
 def login():
     error = None
     if request.method == "POST":
@@ -37,6 +22,7 @@ def login():
         conn = db_connection()
         cursor = conn.cursor(dictionary=True)
 
+        # fetch user by email and password
         cursor.execute("SELECT * FROM user_sign WHERE email=%s AND password=%s", (email, password))
         user = cursor.fetchone()
 
@@ -50,7 +36,7 @@ def login():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        
+        # collecting the data
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
@@ -76,11 +62,16 @@ def signup():
 
 @app.route("/landing")
 def landing():
-    return render_template("landing.html")
+    return render_template('landing.html')
+
+@app.route("/spam")
+def spam():
+    return render_template('spam.html')
+
+@app.route("/validations")
+def validations():
+    return render_template("validations.html")
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",  debug=True)
-
-
-
->>>>>>> origin/main
+    app.run(debug=True)
