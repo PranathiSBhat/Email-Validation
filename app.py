@@ -70,7 +70,7 @@ def spam():
 
 @app.route("/validations")
 def validations():
-    return render_template("validation.html")
+    return render_template("validations.html")
 
 
 if __name__ == "__main__":
