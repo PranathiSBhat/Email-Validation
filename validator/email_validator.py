@@ -9,20 +9,33 @@ def validate_email(email: str) -> dict:
     return response.json()
 
 def validate_batch(emails: list[str]):
-    """Validate a batch of emails (max 100)."""
+    """Validate multiple emails by calling single validation for each."""
     if not emails:
         raise ValueError("Email list is empty.")
     if len(emails) > 100:
         raise ValueError("Batch limit exceeded: max 100 emails.")
     
-    # Try sending as list of dicts (as API may expect this format)
-    payload = {"emails": [{"email": e} for e in emails]}
-    response = requests.post(BASE_URL, json=payload)
-    response.raise_for_status()
-    data = response.json()
-    
-    print("\nDEBUG Raw batch response:", data)  # Debug line
-    return data
+    results = []
+    for email in emails:
+        try:
+            result = validate_email(email)
+            results.append(result)
+        except Exception as e:
+            results.append({
+                "email": email,
+                "validations": {},
+                "score": 0,
+                "status": f"ERROR: {str(e)}"
+            })
+    return results
+
+def print_result(item: dict):
+    """Helper to print results consistently."""
+    print(f"Email: {item.get('email', '')}")
+    print(" Validations:", item.get("validations", {}))
+    print(" Score:", item.get("score"))
+    print(" Status:", item.get("status"))
+    print("-" * 40)
 
 if __name__ == "__main__":
     choice = input("Do you want to validate a single email or multiple emails? (single/batch): ").strip().lower()
@@ -31,44 +44,16 @@ if __name__ == "__main__":
         email = input("Enter the email address: ").strip()
         result = validate_email(email)
         print("\nValidation Result:")
-        print(result)
+        print_result(result)
 
     elif choice == "batch":
-        raw_input = input("Enter multiple emails separated by commas: ").strip()
-        emails = [e.strip() for e in raw_input.split(",") if e.strip()]
+        raw_input_str = input("Enter multiple emails separated by commas: ").strip()
+        emails = [e.strip() for e in raw_input_str.split(",") if e.strip()]
         results = validate_batch(emails)
 
         print("\nBatch Validation Results:")
-
-        # If API returns a list
-        if isinstance(results, list):
-            for item in results:
-                print(f"Email: {item.get('email', '')}")
-                print(" Validations:", item.get("validations", {}))
-                print(" Score:", item.get("score"))
-                print(" Status:", item.get("status"))
-                print("-" * 40)
-
-        # If API returns a dict with 'emails' or 'results'
-        elif isinstance(results, dict):
-            for key, value in results.items():
-                # Sometimes key is "results", sometimes directly the email
-                if isinstance(value, dict):
-                    print(f"Email: {value.get('email', key)}")
-                    print(" Validations:", value.get("validations", {}))
-                    print(" Score:", value.get("score"))
-                    print(" Status:", value.get("status"))
-                    print("-" * 40)
-                elif isinstance(value, list):
-                    for item in value:
-                        print(f"Email: {item.get('email', '')}")
-                        print(" Validations:", item.get("validations", {}))
-                        print(" Score:", item.get("score"))
-                        print(" Status:", item.get("status"))
-                        print("-" * 40)
-
-        else:
-            print("Unexpected batch response format:", results)
+        for item in results:
+            print_result(item)
 
     else:
         print("Invalid choice. Please type 'single' or 'batch'.")
