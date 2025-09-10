@@ -4,231 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page - MailGuard</title>
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <style>
-     .navbar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .navbar-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 14px;
-    }
-
-    .navbar-left span {
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    .navbar-left a {
-      text-decoration: none;
-      color: white;
-      transition: 0.3s;
-    }
-
-    .navbar-left a:hover {
-      color: #bbb;
-    }
-
-     h1 {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 5px 0;
-    }
-
-    h2 {
-      font-size: 18px;
-      font-weight: normal;
-      color: #666;
-      margin: 5px 0 20px;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
-      text-align: center;
-    }
-
-     .hero {
-      margin: 80px 20px;
-    }
-
-    .hero h1 {
-      font-size: 36px;
-      font-weight: bold;
-    }
-
-    .hero p {
-      font-size: 18px;
-      margin: 10px 0 20px;
-    }
-
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 50px;
-      height: 300px;
-      background-color: black;
-    }
-
-    .card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .card i {
-      font-size: 50px;
-      margin-bottom: 15px;
-      color: white;
-    }
-
-    .card span {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .card:hover {
-      transform: scale(1.1);
-      color: #0f0; 
-    }
-
-    .card:hover i {
-      color: #0f0;
-    }
-
-    .h1_tag{
-      margin-top: 50px;
-      width: auto;
-      height: 80px;
-    } 
-    
-     .form-section {
-      margin: auto;
-      max-width: 400px;
-      text-align: left;
-    }
-
-    .form-section h2 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    .form-section p {
-      text-align: center;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .form-section input, 
-    .form-section textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .form-section button {
-      width: 100%;
-      padding: 12px;
-      background: #111;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* Results Section */
-    .results {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 50px;
-      margin: 60px auto;
-      max-width: 500px;
-      padding: 20px;
-      border: 2px solid #00aaff;
-      border-radius: 8px;
-    }
-
-    .results div {
-      text-align: center;
-    }
-
-    .results h1 {
-      font-size: 36px;
-      margin-bottom: 5px;
-    }
-
-    .results p {
-      font-size: 14px;
-      color: #555;
-    }
-    
-    </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-black text-white text-center font-sans m-0 p-0">
 
-   <div class="navbar">
-    <div class="navbar-left">
-      <span>MailGuard®</span>
-      <a href="{{ url_for('landing') }}">Home</a>
-      <a href="#">Register</a>
-      <a href="#">Help</a>
+  <!-- Navbar -->
+  <div class="w-full flex justify-between items-center px-[30px] py-[15px] absolute top-0 left-0">
+    <div class="flex items-center gap-[20px] text-[14px]">
+      <span class="font-bold text-[16px]">MailGuard®</span>
+      <a href="{{ url_for('landing') }}" class="text-white hover:text-[#00FF00] transition-colors duration-300">Home</a>
+      <a href="{{ url_for('validations') }}" class="text-white hover:text-[#00FF00] transition-colors duration-300">Email-Validation</a>
+      <a href="#" class="text-white hover:text-[#00FF00] transition-colors duration-300">Help</a>
     </div>
-
-
-  </div><br><br>
-  <div class="h1_tag">
-    
-   <h1>Email Validation and Spam Checker</h1>
-
   </div>
 
-    <div class="form-section">
-    <h2>Enter Your Email</h2>
-    <p>Instant check.</p>
+  <!-- Heading -->
+  <div class="mt-[50px] h-[80px] flex items-center justify-center">
+    <h1 class="text-[24px] font-bold m-[5px]">Email Validation and Spam Checker</h1>
+  </div>
+
+  <!-- Form Section -->
+  <div class="mx-auto max-w-[400px] text-left">
+    <h2 class="text-center text-[24px] mb-[10px]">Enter Your Email</h2>
+    <p class="text-center text-[#555] mb-[20px]">Instant check.</p>
     <form>
-      <input type="text" placeholder="Name">
-      <input type="email" placeholder="Email">
-      <textarea placeholder="Your message..."></textarea>
-      <button type="submit">Submit</button>
+      <input type="text" placeholder="Name" class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]">
+      <input type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]">
+      <textarea placeholder="Your message..." class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]"></textarea>
+      <button type="submit" class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded  ">Submit</button>
     </form>
   </div>
 
   <!-- Results Section -->
-  <div class="results">
-    <div>
-      <h1>Classification:</h1>
-      <p> </p>
-      
-      
+  <div class="flex justify-center items-center gap-[50px] mt-[60px] mx-auto max-w-[500px] p-[20px] border-2 border-[#00aaff] rounded-[8px]">
+    <div class="text-center">
+      <h1 class="text-[36px] mb-[5px]">Classification:</h1>
+      <p class="text-[14px] text-[#555]"></p>
     </div>
-   
   </div>
 
-  <a href="{{ url_for('landing') }}" style="color:lime;">⬅ Back to Home</a>
+  <!-- Back Link -->
+  <div class="mt-[20px]">
+    <a href="{{ url_for('landing') }}" class="text-[#00ff00]">⬅ Back to Home</a>
+  </div>
 
 </body>
 </html>

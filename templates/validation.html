@@ -12,9 +12,9 @@
   <div class="w-full flex justify-between items-center px-8 py-4 absolute top-0 left-0">
     <div class="flex items-center gap-6 text-sm">
       <span class="font-bold text-lg">MailGuard®</span>
-      <a href="{{ url_for('landing') }}" class="hover:text-gray-400">Home</a>
-      <a href="#" class="hover:text-gray-400">Register</a>
-      <a href="#" class="hover:text-gray-400">Help</a>
+      <a href="{{ url_for('landing') }}" class="hover:text-[#00FF00]">Home</a>
+      <a href="{{url_for('spam')}}" class="hover:text-[#00FF00]">Spam-check</a>
+      <a href="#" class="hover:text-[#00FF00]">Help</a>
     </div>
   </div>
 
@@ -37,10 +37,7 @@
       <input type="text" name="emails" placeholder="Enter email(s)..." 
              class="w-full p-3 rounded bg-gray-800 text-white border-none">
 
-      <button type="submit" 
-              class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded">
-        Submit
-      </button>
+      <button type="submit"  class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded"> Submit </button>
     </form>
   </div>
 
