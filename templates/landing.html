@@ -1,53 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Landing Page - MailGuard</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config for dark mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <!-- Font Awesome for icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
 
+  <style>
+    body {
+      transition: background-color 0.3s, color 0.3s;
+    }
   </style>
 </head>
-<body class="bg-black text-white font-sans m-0 p-0 text-center">
+
+<body class="bg-white text-black dark:bg-black dark:text-white font-sans m-0 p-0 text-center">
 
   <!-- Navbar -->
   <div class="w-full flex justify-between items-center px-8 py-4 absolute top-0 left-0">
     <div class="flex items-center gap-6 text-sm">
       <span class="font-bold text-lg">MailGuard®</span>
-      <a href="#" class="hover:text-[#00FF00]">Home</a>
-      <a href="#" class="hover:text-[#00FF00]">Register</a>
-      <a href="#" class="hover:text-[#00FF00]">Help</a>
+      <a href="#" class="hover:text-green-500">Home</a>
+      <a href="{{url_for('signup')}}" class="hover:text-green-500">Register</a>
+      <a href="#" class="hover:text-green-500">Help</a>
     </div>
+
+    <!-- Theme Toggle Button -->
+   <button id="theme-toggle" class="text-sm px-3 py-1 bg-gray-600 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+      🌙
+    </button>
   </div>
 
   <!-- Header -->
   <div class="mt-24">
     <h1 class="text-3xl font-bold">Email Validation and Spam Checker</h1>
-    <h2 class="text-lg font-normal text-gray-400 mt-2">Select the option you want to continue with</h2>
+    <h2 class="text-lg font-normal text-gray-600 dark:text-gray-400 mt-2">
+      Select the option you want to continue with
+    </h2>
   </div>
 
+  <!-- Cards Section -->
   <div class="flex justify-center items-center gap-16 h-[300px] mt-10">
+    
     <!-- Email Validation  -->
-    <div class="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-110" onclick="location.href='/validations'">
-  <i class="fa-solid fa-envelope text-6xl mb-4 text-white group-hover:text-[#00FF00]"></i>
-  <span class="text-xl font-bold text-white group-hover:text-[#00FF00]">Email Validation</span>
-</div>
-
-
+    <div class="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-110"
+         onclick="location.href='/validations'">
+      <i class="fa-solid fa-envelope text-6xl mb-4 group-hover:text-green-500"></i>
+      <span class="text-xl font-bold group-hover:text-green-500">Email Validation</span>
+    </div>
 
     <!-- Spam Checker  -->
-   <div class="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-110" onclick="location.href='/spam'">
-  <i class="fa-solid fa-shield-halved text-6xl mb-4 text-white group-hover:text-[#00FF00]"></i>
-  <span class="text-xl font-bold text-white group-hover:text-[#00FF00]">Spam Checker</span>
-</div>
-
-
+    <div class="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-110"
+         onclick="location.href='/spam'">
+      <i class="fa-solid fa-shield-halved text-6xl mb-4 group-hover:text-green-500"></i>
+      <span class="text-xl font-bold group-hover:text-green-500">Spam Checker</span>
     </div>
+
   </div>
+
+  <!-- Theme Toggle Script -->
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      root.classList.add('dark');
+      toggle.textContent = '☀️';
+    } else {
+      root.classList.remove('dark');
+      toggle.textContent = '🌙';
+    }
+
+    // Toggle theme on click
+    toggle.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      const isDark = root.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      toggle.textContent = isDark ? '☀️' : '🌙';
+    });
+  </script>
 
 </body>
 </html>

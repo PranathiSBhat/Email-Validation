@@ -1,38 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Landing Page - MailGuard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-black text-white text-center font-sans m-0 p-0">
+
+<body class="bg-white text-black dark:bg-black dark:text-white text-center font-sans m-0 p-0 transition-colors duration-300">
 
   <!-- Navbar -->
   <div class="w-full flex justify-between items-center px-[30px] py-[15px] absolute top-0 left-0">
     <div class="flex items-center gap-[20px] text-[14px]">
       <span class="font-bold text-[16px]">MailGuard®</span>
-      <a href="{{ url_for('landing') }}" class="text-white hover:text-[#00FF00] transition-colors duration-300">Home</a>
-      <a href="{{ url_for('validations') }}" class="text-white hover:text-[#00FF00] transition-colors duration-300">Email-Validation</a>
-      <a href="#" class="text-white hover:text-[#00FF00] transition-colors duration-300">Help</a>
+      <a href="{{ url_for('landing') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Home</a>
+      <a href="{{ url_for('validations') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Email-Validation</a>
+      <a href="#" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Help</a>
     </div>
+
+    <!-- Theme Toggle -->
+   <button id="theme-toggle" class="text-sm px-3 py-1 bg-gray-600 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+      🌙
+    </button>
   </div>
 
   <!-- Heading -->
-  <div class="mt-[50px] h-[80px] flex items-center justify-center">
-    <h1 class="text-[24px] font-bold m-[5px]">Email Validation and Spam Checker</h1>
+  <div class="mt-[80px] h-[80px] flex items-center justify-center">
+    <h1 class="text-[34px] font-bold m-[5px]">Spam Checker</h1>
   </div>
 
   <!-- Form Section -->
   <div class="mx-auto max-w-[400px] text-left">
-    <h2 class="text-center text-[24px] mb-[10px]">Enter Your Email</h2>
-    <p class="text-center text-[#555] mb-[20px]">Instant check.</p>
-    <form>
-      <input type="text" placeholder="Name" class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]">
-      <input type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]">
-      <textarea placeholder="Your message..." class="w-full p-3 rounded bg-gray-800 text-white border-none mb-[15px]"></textarea>
-      <button type="submit" class="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded  ">Submit</button>
+    <p class="text-center text-[20px] mb-[20px]">Instant check.</p>
+
+    <form class="items-center">
+      <input type="text" placeholder="Name" class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
+      <input type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
+      <textarea placeholder="Your message..." class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]"></textarea>
+      <button type="submit" class="w-[200px] p-3 bg-green-500 hover:bg-green-700 text-white font-bold rounded mx-auto block">Submit</button>
     </form>
   </div>
 
@@ -40,14 +55,39 @@
   <div class="flex justify-center items-center gap-[50px] mt-[60px] mx-auto max-w-[500px] p-[20px] border-2 border-[#00aaff] rounded-[8px]">
     <div class="text-center">
       <h1 class="text-[36px] mb-[5px]">Classification:</h1>
-      <p class="text-[14px] text-[#555]"></p>
+      <p class="text-[14px] text-gray-600 dark:text-gray-400"></p>
     </div>
   </div>
 
   <!-- Back Link -->
-  <div class="mt-[20px]">
-    <a href="{{ url_for('landing') }}" class="text-[#00ff00]">⬅ Back to Home</a>
-  </div>
+  <a href="{{ url_for('landing') }}"
+     class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 mt-6 inline-block">
+     ⬅ Back to Home
+  </a>
+
+  <!-- Theme Toggle Script -->
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      root.classList.add('dark');
+      toggle.textContent = '☀️';
+    } else {
+      root.classList.remove('dark');
+      toggle.textContent = '🌙';
+    }
+
+    // Toggle and save
+    toggle.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      const isDark = root.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      toggle.textContent = isDark ? '☀️' : '🌙';
+    });
+  </script>
 
 </body>
 </html>
