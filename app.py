@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
+from validator.email_validator import validate_email, validate_batch
 
 app = Flask(__name__)
 
@@ -70,8 +71,9 @@ def spam():
 
 @app.route("/validations")
 def validations():
-    return render_template("validations.html")
+    return render_template('validation.html')
 
 
 if __name__ == "__main__":
     app.run(debug=True)
+
