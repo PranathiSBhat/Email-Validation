@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Email Validation Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --text-light: #000000;
+      --header-bg-light: #000000;
+      --link-light: #ffffff;
+
+      --bg-dark: #0E1117;
+      --text-dark: #ffffff;
+      --header-bg-dark: #000000;
+      --link-dark: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background-color: var(--header-bg-light);
+      color: var(--link-light);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--link-light);
+      margin-left: 20px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      padding: 20px 40px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .email-status {
+      display: flex;
+      justify-content: space-around;
+      margin: 30px 0;
+    }
+
+    .email-status h4 {
+      margin-bottom: 10px;
+    }
+
+    .dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .dark-mode header {
+      background-color: var(--header-bg-dark);
+      color: var(--link-dark);
+    }
+
+    .dark-mode nav a {
+      color: var(--link-dark);
+    }
+
+    .toggle-button {
+      padding: 8px 14px;
+      border: 1px solid #ccc;
+      background: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div><strong>MailGuard®</strong></div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Email Validation</a>
+      <a href="#">Help</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="top-bar">
+      <h1>Email Validation Dashboard</h1>
+      <button class="toggle-button" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </div>
+
+    <hr />
+
+    <div class="email-status">
+      <div>
+        <h4>Email</h4>
+        <p id="email" style="font-size: 18px; font-weight: bold;">abcgmail.om</p>
+      </div>
+      <div>
+        <h4>Validation Status</h4>
+        <p id="status" style="font-size: 18px; font-weight: bold;">VALID</p>
+      </div>
+    </div>
+
+    <h2>Detailed Validation Checks</h2>
+    <canvas id="validationPieChart" width="400" height="300"></canvas>
+
+    <table id="validationTable">
+      <thead>
+        <tr>
+          <th>Check</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JavaScript will populate this -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const validationData = {
+      email: "yashaswinibk02@gmail.om",
+      validations: {
+        syntax: true,
+        domain_exists: true,
+        mx_records: true,
+        mailbox_exists: true,
+        is_disposable: true,
+        is_role_based: true
+      }
+    };
+
+    // Populate Email and Status
+    document.getElementById("email").innerText = validationData.email;
+    const allPassed = Object.values(validationData.validations).every(Boolean);
+    document.getElementById("status").innerText = allPassed ? "VALID" : "INVALID";
+    document.getElementById("status").style.color = allPassed ? "green" : "red";
+
+    // Populate Table
+    const tbody = document.querySelector("#validationTable tbody");
+    for (let [check, passed] of Object.entries(validationData.validations)) {
+      const row = document.createElement("tr");
+      const checkCell = document.createElement("td");
+      checkCell.textContent = check.replace(/_/g, " ");
+      const resultCell = document.createElement("td");
+      resultCell.textContent = passed ? "✅ Passed" : "❌ Failed";
+      row.appendChild(checkCell);
+      row.appendChild(resultCell);
+      tbody.appendChild(row);
+    }
+
+    // Chart.js Pie Chart
+    const passedCount = Object.values(validationData.validations).filter(v => v).length;
+    const failedCount = Object.values(validationData.validations).length - passedCount;
+
+    new Chart(document.getElementById('validationPieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Passed', 'Failed'],
+        datasets: [{
+          data: [passedCount, failedCount],
+          backgroundColor: ['green', 'red']
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Validation Check Results'
+          }
+        }
+      }
+    });
+
+    // Theme toggle logic
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      const btn = document.querySelector(".toggle-button");
+      const isDark = document.body.classList.contains("dark-mode");
+      btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+  </script>
+</body>
+</html>
