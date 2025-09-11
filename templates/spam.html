@@ -29,9 +29,9 @@
     </div>
 
     <!-- Theme Toggle -->
-   <button id="theme-toggle" class="text-sm px-3 py-1 bg-gray-600 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-      🌙
-    </button>
+   <button id="theme-toggle" class="text-2xl px-5 py-3 rounded-full transition">
+  🌙
+</button>
   </div>
 
   <!-- Heading -->
@@ -39,25 +39,34 @@
     <h1 class="text-[34px] font-bold m-[5px]">Spam Checker</h1>
   </div>
 
-  <!-- Form Section -->
-  <div class="mx-auto max-w-[400px] text-left">
-    <p class="text-center text-[20px] mb-[20px]">Instant check.</p>
+<!-- Form  -->
+<div class="mx-auto max-w-[400px] text-left">
+  <p class="text-center text-[20px] mb-[20px]">Instant check.</p>
 
-    <form class="items-center">
-      <input type="text" placeholder="Name" class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
-      <input type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
-      <textarea placeholder="Your message..." class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]"></textarea>
-      <button type="submit" class="w-[200px] p-3 bg-green-500 hover:bg-green-700 text-white font-bold rounded mx-auto block">Submit</button>
-    </form>
-  </div>
+  <form method="POST" class="items-center">
+    <input type="text" name="name" placeholder="Name" class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
+    <input type="email" name="email" placeholder="Enter email id" required class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]">
+    <textarea name="message" placeholder="Enter email content to classify..." required class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]"></textarea>
+
+    <button type="submit" class="w-[200px] p-3 bg-fuchsia-700 hover:bg-fuchsia-500 text-white font-bold rounded mx-auto block">Submit</button>
+  </form>
+</div>
+
+
+  
 
   <!-- Results Section -->
+{% if result %}
   <div class="flex justify-center items-center gap-[50px] mt-[60px] mx-auto max-w-[500px] p-[20px] border-2 border-[#00aaff] rounded-[8px]">
     <div class="text-center">
       <h1 class="text-[36px] mb-[5px]">Classification:</h1>
-      <p class="text-[14px] text-gray-600 dark:text-gray-400"></p>
+      <p class="text-[20px] font-semibold text-gray-800 dark:text-white">{{ email }}</p>
+      <p class="text-[20px] font-semibold text-gray-800 dark:text-white">{{ result }}</p>
     </div>
   </div>
+{% endif %}
+
+
 
   <!-- Back Link -->
   <a href="{{ url_for('landing') }}"

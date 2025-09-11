@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <title>Email Validation</title>
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class'
@@ -30,10 +30,10 @@
       <a href="#" class="hover:text-green-500">Help</a>
     </div>
 
-    <!-- Theme Toggle Button -->
-    <button id="theme-toggle" class="text-sm px-3 py-1 bg-gray-600 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-      🌙
-    </button>
+    <!-- Theme -->
+     <button id="theme-toggle" class="text-2xl px-5 py-3 rounded-full transition">
+  🌙
+</button>
   </div>
 
   <br><br><br><br>
@@ -54,7 +54,7 @@
       <input type="text" name="emails" placeholder="Enter email(s)..."
              class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none">
 
-        <button type="submit" class="w-[200px] p-3 bg-green-500 hover:bg-green-700 text-white font-bold rounded mx-auto block">Submit</button>
+        <button type="submit" class="w-[200px] p-3 bg-fuchsia-700 hover:bg-fuchsia-500 text-white font-bold rounded mx-auto block">Submit</button>
     </form>
   </div>
 
@@ -63,20 +63,15 @@
     <h2 class="text-xl font-semibold">Classification:</h2>
 
     {% if result %}
-      <ul class="mt-4 list-none p-0">
-        {% for r in result %}
-          <li class="my-1">{{ r }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+  <ul class="mt-4 list-none p-0">
+    {% for r in result %}
+      <li class="my-1">
+        Email: {{ r.email or r.get('email') }}  ➡️  {{ r.status or r.get('status') }} <br>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
-    {% if report %}
-      <div class="mt-4 text-gray-600 dark:text-gray-300">
-        <p>Total Emails: {{ report.total }}</p>
-        <p>Valid: {{ report.valid }}</p>
-        <p>Invalid: {{ report.invalid }}</p>
-      </div>
-    {% endif %}
   </div>
 
   <!-- Back Button -->
@@ -85,12 +80,12 @@
      ⬅ Back to Home
   </a>
 
-  <!-- Theme Toggle Script -->
+  <!-- Theme -->
   <script>
     const toggle = document.getElementById('theme-toggle');
     const root = document.documentElement;
 
-    // Load saved theme from localStorage
+   
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       root.classList.add('dark');
@@ -100,7 +95,6 @@
       toggle.textContent = '🌙';
     }
 
-    // Toggle theme and save preference
     toggle.addEventListener('click', () => {
       root.classList.toggle('dark');
       const isDark = root.classList.contains('dark');
