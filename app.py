@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 from validator.email_validator import validate_email, validate_batch
+from validator.spam_detector import classify_and_store_email
 
 import pickle
 import os
 
 # Load your spam_model and tfidf_vectorizer files
-model_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/spam_model.pkl'
-vectorizer_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/tfidf_vectorizer.pkl'
+model_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/xgboost_model.pkl'
+vectorizer_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/vectorizer.pkl'
 
 with open(model_path, 'rb') as f:
     spam_model = pickle.load(f)
@@ -79,7 +80,23 @@ def signup():
 def landing():
     return render_template('landing.html')
 
-#spam detection
+# #spam detection
+# @app.route("/spam", methods=["GET", "POST"])
+# def spam():
+#     classification_result = None
+#     email_content = ""
+
+#     if request.method == "POST":
+#         email_content = request.form.get("message", "").strip()
+
+#         if email_content:
+#             email_vector = tfidf_vectorizer.transform([email_content])
+#             prediction = spam_model.predict(email_vector)[0]
+#             classification_result = "Spam" if prediction == 1 else "Ham"
+
+
+#     return render_template("spam.html", result=classification_result, email=email_content)
+
 @app.route("/spam", methods=["GET", "POST"])
 def spam():
     classification_result = None
@@ -89,9 +106,10 @@ def spam():
         email_content = request.form.get("message", "").strip()
 
         if email_content:
-            email_vector = tfidf_vectorizer.transform([email_content])
-            prediction = spam_model.predict(email_vector)[0]
-            classification_result = "Spam" if prediction == 1 else "Ham"
+            result = classify_and_store_email(email_content)  # This runs prediction + saves to DB
+
+            # Show combined results for both models
+            classification_result = result["xgboost_prediction"]
 
     return render_template("spam.html", result=classification_result, email=email_content)
 
