@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 
 # Load data
-df = pd.read_csv('C:/Users/Pranathi/OneDrive/Desktop/project/uploads/validated_emails.csv')
+df = pd.read_csv('C:/CGI/Project/Email-Validation/uploads/validated_emails.csv')
 df.info()
 df.head()
 
@@ -27,6 +27,10 @@ df = df[df['text'].str.strip() != ""]
 print("Label distribution:\n", df['label'].value_counts())
 
 df.head()
+
+# Drop rows where text is NaN or empty BEFORE splitting
+df = df.dropna(subset=['text', 'label'])
+df = df[df['text'].str.strip() != ""]
 
 X = df['text']
 y = df['label']

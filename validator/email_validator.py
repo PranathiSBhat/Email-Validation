@@ -9,8 +9,8 @@ def get_db_connection():
     return mysql.connector.connect(
         host="localhost",      # change if using remote server
         user="root",           # your MySQL username
-        password="cgi@2025",  # your MySQL password
-        database="email_validation",
+        password="root",  # your MySQL password
+        database="capstone_project",
         auth_plugin="mysql_native_password"
     )
 
