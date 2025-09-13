@@ -1,29 +1,84 @@
 import requests
+import mysql.connector
+import json
 
 BASE_URL = "https://rapid-email-verifier.fly.dev/api/validate"
 
+# --- Database Setup ---
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",      # change if using remote server
+        user="root",           # your MySQL username
+        password="root",  # your MySQL password
+        database="capstone_project",
+        auth_plugin="mysql_native_password"
+    )
+
+def insert_result_to_db(result: dict):
+    """Insert validation result into MySQL database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql = """
+    INSERT INTO email_results (email, validations, score, status)
+    VALUES (%s, %s, %s, %s)
+    """
+    values = (
+        result.get("email", ""),
+        json.dumps(result.get("validations", {})),  # store dict as JSON
+        result.get("score", 0),
+        result.get("status", "")
+    )
+
+    cursor.execute(sql, values)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+# --- Validation Functions ---
 def validate_email(email: str) -> dict:
     """Validate a single email address."""
     response = requests.post(BASE_URL, json={"email": email})
     response.raise_for_status()
-    return response.json()
+    result = response.json()
+    insert_result_to_db(result)  # Save to DB
+    return result
 
 def validate_batch(emails: list[str]):
-    """Validate a batch of emails (max 100)."""
+    """Validate multiple emails by calling single validation for each."""
     if not emails:
         raise ValueError("Email list is empty.")
     if len(emails) > 100:
         raise ValueError("Batch limit exceeded: max 100 emails.")
     
-    # Try sending as list of dicts (as API may expect this format)
-    payload = {"emails": [{"email": e} for e in emails]}
-    response = requests.post(BASE_URL, json=payload)
-    response.raise_for_status()
-    data = response.json()
-    
-    print("\nDEBUG Raw batch response:", data)  # Debug line
-    return data
+    results = []
+    for email in emails:
+        try:
+            result = validate_email(email)  # insert handled inside validate_email
+            results.append(result)
+        except Exception as e:
+            error_result = {
+                "email": email,
+                "validations": {},
+                "score": 0,
+                "status": f"ERROR: {str(e)}"
+            }
+            insert_result_to_db(error_result)  # Save error also
+            results.append(error_result)
+    return results
 
+
+# --- Print Helper ---
+def print_result(item: dict):
+    print(f"Email: {item.get('email', '')}")
+    print(" Validations:", item.get("validations", {}))
+    print(" Score:", item.get("score"))
+    print(" Status:", item.get("status"))
+    print("-" * 40)
+
+
+# --- Main Execution ---
 if __name__ == "__main__":
     choice = input("Do you want to validate a single email or multiple emails? (single/batch): ").strip().lower()
 
@@ -31,44 +86,16 @@ if __name__ == "__main__":
         email = input("Enter the email address: ").strip()
         result = validate_email(email)
         print("\nValidation Result:")
-        print(result)
+        print_result(result)
 
     elif choice == "batch":
-        raw_input = input("Enter multiple emails separated by commas: ").strip()
-        emails = [e.strip() for e in raw_input.split(",") if e.strip()]
+        raw_input_str = input("Enter multiple emails separated by commas: ").strip()
+        emails = [e.strip() for e in raw_input_str.split(",") if e.strip()]
         results = validate_batch(emails)
 
         print("\nBatch Validation Results:")
-
-        # If API returns a list
-        if isinstance(results, list):
-            for item in results:
-                print(f"Email: {item.get('email', '')}")
-                print(" Validations:", item.get("validations", {}))
-                print(" Score:", item.get("score"))
-                print(" Status:", item.get("status"))
-                print("-" * 40)
-
-        # If API returns a dict with 'emails' or 'results'
-        elif isinstance(results, dict):
-            for key, value in results.items():
-                # Sometimes key is "results", sometimes directly the email
-                if isinstance(value, dict):
-                    print(f"Email: {value.get('email', key)}")
-                    print(" Validations:", value.get("validations", {}))
-                    print(" Score:", value.get("score"))
-                    print(" Status:", value.get("status"))
-                    print("-" * 40)
-                elif isinstance(value, list):
-                    for item in value:
-                        print(f"Email: {item.get('email', '')}")
-                        print(" Validations:", item.get("validations", {}))
-                        print(" Score:", item.get("score"))
-                        print(" Status:", item.get("status"))
-                        print("-" * 40)
-
-        else:
-            print("Unexpected batch response format:", results)
+        for item in results:
+            print_result(item)
 
     else:
         print("Invalid choice. Please type 'single' or 'batch'.")
