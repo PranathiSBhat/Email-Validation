@@ -81,22 +81,7 @@ def signup():
 def landing():
     return render_template('landing.html')
 
-# #spam detection
-# @app.route("/spam", methods=["GET", "POST"])
-# def spam():
-#     classification_result = None
-#     email_content = ""
 
-#     if request.method == "POST":
-#         email_content = request.form.get("message", "").strip()
-
-#         if email_content:
-#             email_vector = tfidf_vectorizer.transform([email_content])
-#             prediction = spam_model.predict(email_vector)[0]
-#             classification_result = "Spam" if prediction == 1 else "Ham"
-
-
-#     return render_template("spam.html", result=classification_result, email=email_content)
 
 @app.route("/spam", methods=["GET", "POST"])
 def spam():
@@ -149,6 +134,17 @@ def validations():
 
     return render_template("validation.html", result=result, report=report)
 
+# integration for dashboard uncomment it once the integration is done
+
+@app.route("/spam_dashboard")
+def spam_dashboard():
+     return render_template("spam_dashboard.html") # need to  change according to file name 
+
+@app.route("/validation_dashboard")
+def validation_dashboard():
+     return render_template("email_dashboard.html") # need to change according to file name
+
+# integration ends here
 
 if __name__ == "__main__":
     app.run(debug=True)

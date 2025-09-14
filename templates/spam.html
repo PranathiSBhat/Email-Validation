@@ -25,7 +25,12 @@
       <span class="font-bold text-[16px]">MailGuard®</span>
       <a href="{{ url_for('landing') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Home</a>
       <a href="{{ url_for('validations') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Email-Validation</a>
-      <a href="#" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Help</a>
+
+
+      <!-- uncomment the below linw for report part -->
+
+   <a href="{{url_for('spam_dashboard')}}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Report</a>
+
     </div>
 
     <!-- Theme change -->
@@ -52,7 +57,7 @@
                 class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none mb-[15px]"></textarea>
 
       <button type="submit"
-              class="w-[200px] p-3 bg-fuchsia-700 hover:bg-fuchsia-500 text-white font-bold rounded mx-auto block">
+              class="w-[200px] p-3 bg-teal-400 hover:bg-teal-500  text-white font-bold rounded mx-auto block">
         Submit
       </button>
     </form>
@@ -71,7 +76,7 @@
   <!-- Back Link -->
   <a href="{{ url_for('landing') }}"
      class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 mt-6 inline-block">
-     ⬅ Back to Home
+    <b>⬅ Back to Home</b> 
   </a>
 
   <!--  Toggle Script -->
