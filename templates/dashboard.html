@@ -127,11 +127,11 @@
     <div class="email-status">
       <div>
         <h4>Email</h4>
-        <p id="email" style="font-size: 18px; font-weight: bold;">abcgmail.om</p>
+        <p id="email" style="font-size: 18px; font-weight: bold;">-</p>
       </div>
       <div>
         <h4>Validation Status</h4>
-        <p id="status" style="font-size: 18px; font-weight: bold;">VALID</p>
+        <p id="status" style="font-size: 18px; font-weight: bold;">-</p>
       </div>
     </div>
 
@@ -146,66 +146,108 @@
         </tr>
       </thead>
       <tbody>
-        <!-- JavaScript will populate this -->
+        <!-- Populated dynamically -->
       </tbody>
     </table>
   </div>
 
   <script>
-    const validationData = {
-      email: "yashaswinibk02@gmail.om",
-      validations: {
-        syntax: true,
-        domain_exists: true,
-        mx_records: true,
-        mailbox_exists: true,
-        is_disposable: true,
-        is_role_based: true
-      }
-    };
+    async function loadData() {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/emails");
+        const data = await response.json();
 
-    // Populate Email and Status
-    document.getElementById("email").innerText = validationData.email;
-    const allPassed = Object.values(validationData.validations).every(Boolean);
-    document.getElementById("status").innerText = allPassed ? "VALID" : "INVALID";
-    document.getElementById("status").style.color = allPassed ? "green" : "red";
-
-    // Populate Table
-    const tbody = document.querySelector("#validationTable tbody");
-    for (let [check, passed] of Object.entries(validationData.validations)) {
-      const row = document.createElement("tr");
-      const checkCell = document.createElement("td");
-      checkCell.textContent = check.replace(/_/g, " ");
-      const resultCell = document.createElement("td");
-      resultCell.textContent = passed ? "✅ Passed" : "❌ Failed";
-      row.appendChild(checkCell);
-      row.appendChild(resultCell);
-      tbody.appendChild(row);
-    }
-
-    // Chart.js Pie Chart
-    const passedCount = Object.values(validationData.validations).filter(v => v).length;
-    const failedCount = Object.values(validationData.validations).length - passedCount;
-
-    new Chart(document.getElementById('validationPieChart'), {
-      type: 'pie',
-      data: {
-        labels: ['Passed', 'Failed'],
-        datasets: [{
-          data: [passedCount, failedCount],
-          backgroundColor: ['green', 'red']
-        }]
-      },
-      options: {
-        responsive: false,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Validation Check Results'
-          }
+        if (!data || data.length === 0) {
+          document.getElementById("email").innerText = "No records found";
+          document.getElementById("status").innerText = "-";
+          document.getElementById("status").style.color = "gray";
+          
+          // Clear the table
+          const tbody = document.querySelector("#validationTable tbody");
+          tbody.innerHTML = "<tr><td colspan='2'>No validation data available</td></tr>";
+          
+          // Show empty chart
+          new Chart(document.getElementById('validationPieChart'), {
+            type: 'pie',
+            data: {
+              labels: ['No Data'],
+              datasets: [{
+                data: [1],
+                backgroundColor: ['gray']
+              }]
+            },
+            options: {
+              responsive: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'No Validation Data Available'
+                }
+              }
+            }
+          });
+          return;
         }
+
+        // Take the latest email record
+        const latest = data[0];
+
+        // Prepare validation object from DB fields
+        const validationData = {
+          email: latest.email,
+          validations: {
+            syntax_check: latest.syntax_check === 1,
+            domain_exists: latest.domain_exists === 1,
+            mx_records: latest.mx_records === 1,
+            mailbox_exists: latest.mailbox_exists === 1,
+            is_disposable: latest.is_disposable === 1,
+            is_role_based: latest.is_role_based === 1
+          }
+        };
+
+        // Update email + status
+        document.getElementById("email").innerText = validationData.email;
+        const allPassed = Object.values(validationData.validations).every(Boolean);
+        document.getElementById("status").innerText = allPassed ? "VALID" : "INVALID";
+        document.getElementById("status").style.color = allPassed ? "green" : "red";
+
+        // Update table
+        const tbody = document.querySelector("#validationTable tbody");
+        tbody.innerHTML = "";
+        for (let [check, passed] of Object.entries(validationData.validations)) {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${check.replace(/_/g, " ")}</td><td>${passed ? "✅ Passed" : "❌ Failed"}</td>`;
+          tbody.appendChild(row);
+        }
+
+        // Update pie chart
+        const passedCount = Object.values(validationData.validations).filter(v => v).length;
+        const failedCount = Object.values(validationData.validations).length - passedCount;
+
+        new Chart(document.getElementById('validationPieChart'), {
+          type: 'pie',
+          data: {
+            labels: ['Passed', 'Failed'],
+            datasets: [{
+              data: [passedCount, failedCount],
+              backgroundColor: ['green', 'red']
+            }]
+          },
+          options: {
+            responsive: false,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Validation Check Results'
+              }
+            }
+          }
+        });
+
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
-    });
+    }
 
     // Theme toggle logic
     function toggleTheme() {
@@ -214,6 +256,8 @@
       const isDark = document.body.classList.contains("dark-mode");
       btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
     }
+
+    loadData();
   </script>
 </body>
 </html>

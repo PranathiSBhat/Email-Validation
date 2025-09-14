@@ -9,7 +9,7 @@ def get_db_connection():
     return mysql.connector.connect(
         host="localhost",      # change if using remote server
         user="root",           # your MySQL username
-        password="cgi@2025",  # your MySQL password
+        password="root",  # your MySQL password
         database="email_validation",
         auth_plugin="mysql_native_password"
     )
@@ -19,13 +19,21 @@ def insert_result_to_db(result: dict):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Extract validation results from the API response
+    validations = result.get("validations", {})
+    
     sql = """
-    INSERT INTO email_results (email, validations, score, status)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO email_results (email, syntax_check, domain_exists, mx_records, mailbox_exists, is_disposable, is_role_based, score, status)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (
         result.get("email", ""),
-        json.dumps(result.get("validations", {})),  # store dict as JSON
+        int(validations.get("syntax_check", False)),
+        int(validations.get("domain_exists", False)),
+        int(validations.get("mx_records", False)),
+        int(validations.get("mailbox_exists", False)),
+        int(validations.get("is_disposable", False)),
+        int(validations.get("is_role_based", False)),
         result.get("score", 0),
         result.get("status", "")
     )
