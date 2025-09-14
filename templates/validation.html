@@ -24,9 +24,14 @@
   <div class="w-full flex justify-between items-center px-8 py-4 absolute top-0 left-0">
     <div class="flex items-center gap-6 text-sm">
       <span class="font-bold text-lg">MailGuard®</span>
-      <a href="{{ url_for('landing') }}" class="hover:text-green-500">Home</a>
-      <a href="{{url_for('spam')}}" class="hover:text-green-500">Spam-check</a>
-      <a href="{{url_for('validation_dashboard')}}" class="hover:text-green-500">Report</a> <!-- need to change the url path if needed-->
+      <a href="{{ url_for('landing') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Home</a>
+      <a href="{{url_for('spam')}}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Spam-check</a>
+
+      <!--uncomment below line for report part -->
+
+      <a href="{{url_for('validation_dashboard')}}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Report</a> 
+      
+     <!-- need to change the url path if needed-->
     </div>
 
      <!-- Theme change -->
@@ -53,7 +58,7 @@
       <input type="text" name="emails" placeholder="Enter email(s)..."
              class="w-full p-3 rounded bg-gray-300 text-black dark:bg-gray-800 dark:text-white border-none">
 
-        <button type="submit" class="w-[200px] p-3 bg-fuchsia-700 hover:bg-fuchsia-500 text-white font-bold rounded mx-auto block">Submit</button>
+        <button type="submit" class="w-[200px] p-3 bg-teal-400 hover:bg-teal-500 text-white font-bold rounded mx-auto block">Submit</button>
     </form>
   </div>
 
@@ -76,7 +81,7 @@
   <!-- Back Button -->
   <a href="{{ url_for('landing') }}"
      class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 mt-6 inline-block">
-     ⬅ Back to Home
+     <b>⬅ Back to Home</b>
   </a>
 
  <!--  Toggle Script -->

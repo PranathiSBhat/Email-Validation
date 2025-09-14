@@ -133,14 +133,17 @@ def validations():
 
     return render_template("validation.html", result=result, report=report)
 
+# integration for dashboard uncomment it once the integration is done
+
 @app.route("/spam_dashboard")
 def spam_dashboard():
-    return render_template("spam_dashboard.html") # need to  change according to file name 
+     return render_template("spam_dashboard.html") # need to  change according to file name 
 
 @app.route("/validation_dashboard")
 def validation_dashboard():
-    return render_template("validation_dashboard.html") # need to change according to file name
+     return render_template("email_dashboard.html") # need to change according to file name
 
+# integration ends here
 
 if __name__ == "__main__":
     app.run(debug=True)

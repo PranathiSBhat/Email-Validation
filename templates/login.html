@@ -29,9 +29,8 @@
   <div class="w-full flex justify-between items-center px-[30px] py-[15px] absolute top-0 left-0">
     <div class="flex items-center gap-[20px] text-[14px]">
       <span class="font-bold text-[16px]">MailGuard®</span>
-      <a href="#" class="hover:text-[#bbbbbb] transition duration-300">Home</a>
-      <a href="#" class="hover:text-[#bbbbbb] transition duration-300">Register</a>
-      <a href="#" class="hover:text-[#bbbbbb] transition duration-300">Help</a>
+      <a href="#" class="hover:text-[#00FF00] transition duration-300">Home</a>
+      <a href="{{url_for('signup')}}" class="hover:text-[#00FF00] transition duration-300">Register</a>
     </div>
 
     <!-- Toggle & Signup -->
@@ -39,10 +38,6 @@
     <button id="theme-toggle" class="px-5 py-3 rounded-full transition">
       <img id="theme-icon" src="{{ url_for('static', filename='images/night-mode.png') }}" alt="Toggle Theme" class="w-6 h-6">
     </button>
-
-      <a href="{{ url_for('signup') }}" class="px-[15px] py-[8px] bg-black dark:bg-white text-white dark:text-black font-bold text-[14px] rounded-full hover:bg-gray-800 dark:hover:bg-[#dddddd] transition duration-300">
-        Sign Up
-      </a>
     </div>
   </div>
 
@@ -74,6 +69,10 @@
         class="p-[12px] w-[250px] bg-black text-white dark:bg-white dark:text-black font-bold text-[14px] rounded-[8px] hover:bg-gray-800 dark:hover:bg-[#dddddd] transition duration-300">
         Login
       </button>
+      <a href="{{ url_for('signup') }}"
+     class="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 mt-6 inline-block">
+    <b>If new user? Create Account.</b>
+  </a>
     </form>
   </div>
 
