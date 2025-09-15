@@ -12,6 +12,7 @@ from flask_cors import CORS
 from sklearn.metrics import confusion_matrix
 
 from validator.email_validator import validate_email, validate_batch
+from validator.spam_detector import classify_and_store_email
 
 # ================== Load Model ==================
 xgb_model = None
@@ -157,6 +158,11 @@ def dashboard():
     labels = [label for label, _ in checks]
     values = [1 if val else 0 for _, val in checks]
     colors = ['green' if v == 1 else 'red' for v in values]
+    if email_content:
+        result = classify_and_store_email(email_content)  # This runs prediction + saves to DB
+
+        # Show combined results for both models
+        classification_result = result["xgboost_prediction"]
 
     plt.switch_backend('Agg')
     fig, ax = plt.subplots(figsize=(6, 6))
