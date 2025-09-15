@@ -1,20 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, abort
-import mysql.connector
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+import pymysql
 from validator.email_validator import validate_email, validate_batch
-from validator.spam_detector import classify_and_store_email
-from utils.db_utils import db_connection
-from validator.spam_dashboard import generate_spam_count_plot, generate_confusion_matrix_plot
-from validator.email_dashboard import fetch_email_validation_results
-
-
-
+import import_ipynb 
+from validator.spam_detector import classify_and_store_email 
 import pickle
 import os
-
+from utils.db_utils import db_connection
+from validator.spam_dashboard import generate_confusion_matrix_plot, generate_spam_count_plot
+from validator.email_dashboard import fetch_email_validation_results
 
 # Load your spam_model and tfidf_vectorizer files
-model_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/xgboost_model.pkl'
-vectorizer_path = 'C:/Users/Pranathi/OneDrive/Desktop/project/ml_model/vectorizer.pkl'
+model_path = 'C:/CGI/Project/Email-Validation/ml_model/xgboost_model.pkl'
+vectorizer_path = 'C:/CGI/Project/Email-Validation/ml_model/vectorizer.pkl'
 
 with open(model_path, 'rb') as f:
     spam_model = pickle.load(f)
@@ -25,6 +22,15 @@ with open(vectorizer_path, 'rb') as f:
 
 app = Flask(__name__)
 
+def db_connection():
+    conn = pymysql.connect(
+        host="localhost",
+        user="root",
+        password="cgi@2025",
+        database="email_validation"
+    )
+    return conn
+
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -34,7 +40,7 @@ def login():
         password = request.form["password"]
 
         conn = db_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
 
         # fetch user by email and password
         cursor.execute("SELECT * FROM user_sign WHERE email=%s AND password=%s", (email, password))
@@ -64,7 +70,7 @@ def signup():
                 (name, email, password),
             )
             conn.commit()
-        except mysql.connector.Error as err:
+        except pymysql.Error as err:
             return f"Error: {err}"
         finally:
             cursor.close()

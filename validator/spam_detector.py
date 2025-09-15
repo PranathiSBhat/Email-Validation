@@ -4,12 +4,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from xgboost import XGBClassifier
 from sklearn.metrics import classification_report, accuracy_score
-import mysql.connector
+import pymysql
 import pickle
 import os
 
 def get_db_connection():
-    return mysql.connector.connect(
+    return pymysql.connect(
         host="localhost",
         user="root",             # change if needed
         password="root",     # your MySQL password

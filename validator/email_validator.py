@@ -1,17 +1,15 @@
 import requests
-import mysql.connector
+import pymysql
 import json
 
 BASE_URL = "https://rapid-email-verifier.fly.dev/api/validate"
 
-# --- Database Setup ---
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",      # change if using remote server
-        user="root",           # your MySQL username
-        password="root",  # your MySQL password
-        database="capstone_project",
-        auth_plugin="mysql_native_password"
+    return pymysql.connect(
+        host="localhost",     
+        user="root",           
+        password="cgi@2025",  
+        database="email_validation",
     )
 
 def insert_result_to_db(result: dict):
@@ -25,7 +23,7 @@ def insert_result_to_db(result: dict):
     """
     values = (
         result.get("email", ""),
-        json.dumps(result.get("validations", {})),  # store dict as JSON
+        json.dumps(result.get("validations", {})),  
         result.get("score", 0),
         result.get("status", "")
     )
@@ -35,14 +33,12 @@ def insert_result_to_db(result: dict):
     cursor.close()
     conn.close()
 
-
-# --- Validation Functions ---
 def validate_email(email: str) -> dict:
     """Validate a single email address."""
     response = requests.post(BASE_URL, json={"email": email})
     response.raise_for_status()
     result = response.json()
-    insert_result_to_db(result)  # Save to DB
+    insert_result_to_db(result)  
     return result
 
 def validate_batch(emails: list[str]):
@@ -55,7 +51,7 @@ def validate_batch(emails: list[str]):
     results = []
     for email in emails:
         try:
-            result = validate_email(email)  # insert handled inside validate_email
+            result = validate_email(email)  
             results.append(result)
         except Exception as e:
             error_result = {
@@ -64,12 +60,11 @@ def validate_batch(emails: list[str]):
                 "score": 0,
                 "status": f"ERROR: {str(e)}"
             }
-            insert_result_to_db(error_result)  # Save error also
+            insert_result_to_db(error_result)  
             results.append(error_result)
     return results
 
 
-# --- Print Helper ---
 def print_result(item: dict):
     print(f"Email: {item.get('email', '')}")
     print(" Validations:", item.get("validations", {}))
@@ -78,7 +73,6 @@ def print_result(item: dict):
     print("-" * 40)
 
 
-# --- Main Execution ---
 if __name__ == "__main__":
     choice = input("Do you want to validate a single email or multiple emails? (single/batch): ").strip().lower()
 
