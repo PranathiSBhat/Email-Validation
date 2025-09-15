@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Email Validation Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --bg-light: #ffffff;
@@ -95,7 +95,8 @@
       margin-top: 20px;
     }
 
-    table th, table td {
+    table th,
+    table td {
       border: 1px solid #ccc;
       padding: 10px;
       text-align: left;
@@ -104,8 +105,17 @@
     table th {
       background-color: #f4f4f4;
     }
+
+    /* Image chart styling */
+    #validationPieChartImg {
+      display: block;
+      margin: 0 auto;
+      max-width: 400px;
+      max-height: 300px;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <div><strong>MailGuard®</strong></div>
@@ -127,16 +137,27 @@
     <div class="email-status">
       <div>
         <h4>Email</h4>
-        <p id="email" style="font-size: 18px; font-weight: bold;">-</p>
+        <p id="email" style="font-size: 18px; font-weight: bold;">eac@gmail.com</p>
       </div>
       <div>
         <h4>Validation Status</h4>
-        <p id="status" style="font-size: 18px; font-weight: bold;">-</p>
+        <p id="status" style="font-size: 18px; font-weight: bold; color: red;">INVALID</p>
       </div>
     </div>
 
     <h2>Detailed Validation Checks</h2>
-    <canvas id="validationPieChart" width="400" height="300"></canvas>
+    
+    <div style="text-align: center; margin: 10px 0;">
+      <button onclick="refreshPieChart()" style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        🔄 Refresh Chart
+      </button>
+    </div>
+
+    <!-- Pie chart image -->
+    <div id="pieChartContainer">
+      <img id="validationPieChartImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Validation Pie Chart"
+        style="max-width:400px; max-height:300px; display: block; margin: 0 auto;" />
+    </div>
 
     <table id="validationTable">
       <thead>
@@ -146,12 +167,52 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Filled dynamically -->
+        <tr>
+          <td>Syntax Check</td>
+          <td>❌ Failed</td>
+        </tr>
+        <tr>
+          <td>Domain Exists</td>
+          <td>✅ Passed</td>
+        </tr>
+        <tr>
+          <td>MX Records</td>
+          <td>✅ Passed</td>
+        </tr>
+        <tr>
+          <td>Mailbox Exists</td>
+          <td>✅ Passed</td>
+        </tr>
+        <tr>
+          <td>Disposable</td>
+          <td>✅ Passed</td>
+        </tr>
+        <tr>
+          <td>Role-based</td>
+          <td>✅ Passed</td>
+        </tr>
       </tbody>
     </table>
   </div>
 
   <script>
+    // Theme toggle logic
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+      const btn = document.querySelector(".toggle-button");
+      const isDark = document.body.classList.contains("dark-mode");
+      btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+
+    // Refresh pie chart function
+    function refreshPieChart() {
+      const pieChartContainer = document.getElementById('pieChartContainer');
+      if (pieChartContainer) {
+        pieChartContainer.innerHTML = `<img id="validationPieChartImg" src="/api/pie-chart-image?ts=${new Date().getTime()}" alt="Validation Pie Chart" style="max-width:400px; max-height:300px; display: block; margin: 0 auto;" />`;
+      }
+    }
+
+    // Load data function
     async function loadData() {
       try {
         const response = await fetch("http://127.0.0.1:5000/api/emails");
@@ -161,117 +222,52 @@
           document.getElementById("email").innerText = "No records found";
           document.getElementById("status").innerText = "-";
           document.getElementById("status").style.color = "gray";
-
-          const tbody = document.querySelector("#validationTable tbody");
-          tbody.innerHTML = "<tr><td colspan='2'>No validation data available</td></tr>";
-
-          new Chart(document.getElementById('validationPieChart'), {
-            type: 'pie',
-            data: {
-              labels: ['No Data'],
-              datasets: [{
-                data: [1],
-                backgroundColor: ['gray']
-              }]
-            },
-            options: {
-              responsive: false,
-              plugins: {
-                title: {
-                  display: true,
-                  text: 'No Validation Data Available'
-                }
-              }
-            }
-          });
-
           return;
         }
 
+        // Take the latest email record
         const latest = data[0];
 
+        // Prepare validation object from DB fields
         const validationData = {
           email: latest.email,
           validations: {
-            syntax_check: latest.syntax_check === 1,
-            domain_exists: latest.domain_exists === 1,
-            mx_records: latest.mx_records === 1,
-            mailbox_exists: latest.mailbox_exists === 1,
-            is_disposable: latest.is_disposable === 1,
-            is_role_based: latest.is_role_based === 1
+            'Syntax Check': latest.syntax_check === 1,
+            'Domain Exists': latest.domain_exists === 1,
+            'MX Records': latest.mx_records === 1,
+            'Mailbox Exists': latest.mailbox_exists === 1,
+            'Disposable': latest.is_disposable === 1,
+            'Role-based': latest.is_role_based === 1
           }
         };
 
-        // 🟢 Proper status logic
-        const allPassed =
-          validationData.validations.syntax_check &&
-          validationData.validations.domain_exists &&
-          validationData.validations.mx_records &&
-          validationData.validations.mailbox_exists &&
-          !validationData.validations.is_disposable &&
-          !validationData.validations.is_role_based;
-
-        // Update status
+        // Update email + status
         document.getElementById("email").innerText = validationData.email;
+        const allPassed = Object.values(validationData.validations).every(Boolean);
         document.getElementById("status").innerText = allPassed ? "VALID" : "INVALID";
         document.getElementById("status").style.color = allPassed ? "green" : "red";
 
-        // Update validation table
+        // Update table
         const tbody = document.querySelector("#validationTable tbody");
         tbody.innerHTML = "";
-
-        for (let [check, value] of Object.entries(validationData.validations)) {
-          let isPassed = (check === "is_disposable" || check === "is_role_based") ? !value : value;
-          let checkLabel = check.replace(/_/g, " ");
+        for (let [check, passed] of Object.entries(validationData.validations)) {
           const row = document.createElement("tr");
-          row.innerHTML = `<td>${checkLabel}</td><td>${isPassed ? "✅ Passed" : "❌ Failed"}</td>`;
+          row.innerHTML = `<td>${check}</td><td>${passed ? "✅ Passed" : "❌ Failed"}</td>`;
           tbody.appendChild(row);
         }
 
         // Update pie chart
-        const results = Object.entries(validationData.validations).map(([check, value]) => {
-          return (check === "is_disposable" || check === "is_role_based") ? !value : value;
-        });
-
-        const passedCount = results.filter(Boolean).length;
-        const failedCount = results.length - passedCount;
-
-        new Chart(document.getElementById('validationPieChart'), {
-          type: 'pie',
-          data: {
-            labels: ['Passed', 'Failed'],
-            datasets: [{
-              data: [passedCount, failedCount],
-              backgroundColor: ['green', 'red']
-            }]
-          },
-          options: {
-            responsive: false,
-            plugins: {
-              title: {
-                display: true,
-                text: 'Validation Check Results'
-              }
-            }
-          }
-        });
+        refreshPieChart();
 
       } catch (err) {
-        console.error("Error loading validation data:", err);
+        console.error("Error fetching data:", err);
+        console.log("Make sure the Flask app is running on http://127.0.0.1:5000");
       }
     }
 
-    // Dark/Light mode toggle
-    function toggleTheme() {
-      document.body.classList.toggle("dark-mode");
-      const btn = document.querySelector(".toggle-button");
-      btn.textContent = document.body.classList.contains("dark-mode")
-        ? "☀️ Light Mode"
-        : "🌙 Dark Mode";
-    }
-
-    // Initial load
+    // Load data on page load
     loadData();
   </script>
 </body>
+
 </html>

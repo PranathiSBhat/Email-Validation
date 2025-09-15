@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>📊 Spam Detection Dashboard</title>
+  
+  <!-- Tailwind CSS -->
+  <!-- <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script> -->
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
       --bg-light: #ffffff;
@@ -131,12 +142,19 @@
 </head>
 <body>
   <header>
-    <div><strong>MailGuard®</strong></div>
+    <div><strong>MailGuard®</strong></div> 
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Email Validation</a>
-      <a href="#">Help</a>
-    </nav>
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="{ url_for('spam') }">Spam Dectation</a>
+      
+    </nav> 
+     <!-- <div class="w-full flex justify-between items-center px-[30px] py-[15px] absolute top-0 left-0">
+    <div class="flex items-center gap-[20px] text-[14px]">
+      <span class="font-bold text-[16px]">MailGuard®</span>
+      <a href="{{ url_for('landing') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Home</a>
+      <a href="{{ url_for('validations') }}" class="hover:text-green-500 dark:hover:text-[#00FF00] transition-colors duration-300">Email-Validation</a> -->
+
+
   </header>
 
   <div class="container">
