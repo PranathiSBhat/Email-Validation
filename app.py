@@ -6,6 +6,7 @@ import numpy as np
 import mysql.connector
 import matplotlib.pyplot as plt
 import seaborn as sns
+import import_ipynb
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
 from flask_cors import CORS
