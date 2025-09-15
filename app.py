@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pymysql
 from validator.email_validator import validate_email, validate_batch
 import import_ipynb 
 from validator.spam_detector import classify_and_store_email 
 import pickle
 import os
+from utils.db_utils import db_connection
+from validator.spam_dashboard import generate_confusion_matrix_plot, generate_spam_count_plot
+from validator.email_dashboard import fetch_email_validation_results
 
 # Load your spam_model and tfidf_vectorizer files
 model_path = 'C:/CGI/Project/Email-Validation/ml_model/xgboost_model.pkl'
@@ -92,9 +95,7 @@ def spam():
         email_content = request.form.get("message", "").strip()
 
         if email_content:
-            result = classify_and_store_email(email_content)  # This runs prediction + saves to DB
-
-            # Show combined results for both models
+            result = classify_and_store_email(email_content)  
             classification_result = result["xgboost_prediction"]
 
     return render_template("spam.html", result=classification_result, email=email_content)
@@ -118,14 +119,14 @@ def validations():
                 result = [{"email": emails_input, "status": f"ERROR: {str(e)}"}]
 
         elif mode == "multiple":
-            # Multiple email validation (comma-separated)
+     
             emails = [e.strip() for e in emails_input.split(",") if e.strip()]
             try:
                 result = validate_batch(emails)
             except Exception as e:
                 result = [{"email": "Batch Error", "status": f"ERROR: {str(e)}"}]
 
-        # Prepare a simple report
+     
         if result:
             total = len(result)
             valid = sum(1 for r in result if r.get("status") == "valid" or r.get("status") == "Valid")
@@ -134,17 +135,30 @@ def validations():
 
     return render_template("validation.html", result=result, report=report)
 
-# integration for dashboard uncomment it once the integration is done
+
 
 @app.route("/spam_dashboard")
 def spam_dashboard():
-     return render_template("spam_dashboard.html") # need to  change according to file name 
+    confusion_matrix_img = generate_confusion_matrix_plot()
+    spam_count_img = generate_spam_count_plot()
+
+    return render_template(
+        "spam_dashboard.html",
+        confusion_matrix_url=f"data:image/png;base64,{confusion_matrix_img}" if confusion_matrix_img else None,
+        spam_count_url=f"data:image/png;base64,{spam_count_img}" if spam_count_img else None
+    )
 
 @app.route("/validation_dashboard")
 def validation_dashboard():
      return render_template("email_dashboard.html") # need to change according to file name
 
-# integration ends here
+@app.route("/api/emails")
+def get_email_validation_data():
+    parsed_results = fetch_email_validation_results()
+    return jsonify(parsed_results)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
